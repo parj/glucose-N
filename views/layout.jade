@@ -1,0 +1,19 @@
+doctype 5
+html
+  head
+    title= "Glucose-N"
+    //link(rel='stylesheet', href='/stylesheets/style.css')
+
+    //Twitter - boot strap
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    script(src='/javascripts/jquery-1.8.0.js', type='text/javascript')
+    script(src='/javascripts/bootstrap.js', type='text/javascript')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap-responsive.css')
+
+    //Application - specific
+    script(src='/socket.io/socket.io.js', type='text/javascript')
+    script(src='/javascripts/connection.js', type='text/javascript')
+
+  body
+    block content
