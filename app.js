@@ -45,16 +45,20 @@ socket.sockets.on('connection', function(client){
 
     //On receiving the message event - echo to console
     client.on('message', function(m){
-        ssh(m);
+        ssh(client.id, m);
     });
 
     client.on('disconnect', function(){
         connected = false;
     });
+
+    client.on('execute', function (data) {
+        ssh(client.id, data['command']);
+    });
 });
 
 
-function ssh(data) {
+function ssh(clientId, data) {
     var hasPassword = false;
     var commands = data.toString().split("^");
     process.stdout.write(commands[0] + " : " + commands[1]);
@@ -62,7 +66,9 @@ function ssh(data) {
 
     ssh.stdout.on('data', function (out) {
         process.stdout.write(out);
-        socket.of("").send(out);
+
+        //Send private message only to that client
+        socket.sockets.sockets[clientId].send(out);
         if (!hasPassword) {
             var stdin = process.openStdin();
             stdin.on('data', function (chunk) {
