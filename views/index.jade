@@ -10,9 +10,19 @@ block content
             h6= "Type your SSH command"
 
         div.row
-            form(class="form-search")
-                input#txtCommand(class="span11 input-medium search-query control-label", type="text", placeholder="Type: <ssh commands^user@host>. Ex: ls;uname -a^foo@bar.com")
-                btn(class="btn btn-primary", onClick="sendMessage()")= "Submit"
+            form#frmSubmit(class="form-search", action="", submit="sendMessage()")
+                div#divError(class="control-group")
+                    div.controls
+                        input#txtCommand(class="span11 input-medium search-query control-label", type="text", placeholder="Type: <ssh commands^user@host>. Ex: ls;uname -a^foo@bar.com")
+                        btn#btnCommand(class="btn btn-primary", type="submit")= "Submit"
+                        span#txtHelp(class="help-inline")
 
         div.row
             textArea#txtResult(class="span11", readonly = true, rows=30)
+
+
+    script(type="text/javascript")
+        $('#frmSubmit').submit(function () {
+            sendMessage();
+            return false;
+        });
