@@ -7,7 +7,7 @@ block content
     div.container
         div.row
             h1= "Glucose-N"
-            h6= "Type your SSH command"
+            span(class="label") Type your SSH command
 
         div.row
             form#frmSubmit(class="form-search", action="", submit="sendMessage()")
@@ -15,12 +15,13 @@ block content
                     div.controls
                         input#txtCommand(class="span11 input-medium search-query control-label", type="text", placeholder="Type: <ssh commands^user@host>. Ex: ls;uname -a^foo@bar.com")
                         btn#btnCommand(class="btn btn-primary", type="submit")= "Submit"
-                        span#txtHelp(class="help-inline")
+                        div#txtHelp
 
         div.row
             textArea#txtResult(class="span11", readonly = true, rows=30)
 
 
+    //Disables the form from refreshing the page
     script(type="text/javascript")
         $('#frmSubmit').submit(function () {
             sendMessage();

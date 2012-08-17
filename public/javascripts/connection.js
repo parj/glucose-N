@@ -27,12 +27,12 @@ function sanityCheck() {
     }
 
     if (!boolOK) {
-        document.getElementById('divError').setAttribute("class", "control-group error");
+        document.getElementById('divError').setAttribute("class", "alert alert-error");
         document.getElementById('btnCommand').setAttribute("class", "btn btn-danger");
         document.getElementById('txtHelp').textContent = error;
 
     } else {
-        document.getElementById('divError').setAttribute("class","control-group");
+        document.getElementById('divError').setAttribute("class","");
         document.getElementById('btnCommand').setAttribute("class", "btn btn-primary");
         document.getElementById('txtHelp').textContent = "";
     }
