@@ -9,6 +9,7 @@
     "express": "3.0.0rc3",
     "jade": "*",
     "stylus": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "log4js" : "*"
   }
 }

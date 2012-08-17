@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -13,6 +12,10 @@ var spawn = require('child_process').spawn,
     sys = require('sys');
 
 var io = require('socket.io');
+var log4js = require('log4js');
+
+var logger = log4js.getLogger();
+logger.setLevel('INFO');
 
 var app = express();
 
@@ -36,24 +39,24 @@ app.configure('development', function(){
 app.get('/', routes.index);
 
 var socket = io.listen(http.createServer(app).listen(process.env.PORT || 3000), function(){
-  console.log("Express server listening on port " + app.get('port'));
+  logger.info("Express server listening on port " + app.get('port'));
 });
+
+logger.info("Express server listening on port " + app.get('port'));
 
 
 socket.sockets.on('connection', function(client){
     var connected = true;
+    logger.trace("Recevied a connection request from " + client.id);
 
-    //On receiving the message event - echo to console
     client.on('message', function(m){
+        logger.debug("Message received " + m + " from " + client.id)
         ssh(client.id, m);
     });
 
     client.on('disconnect', function(){
+        logger.trace("Disconnected " + client.id);
         connected = false;
-    });
-
-    client.on('execute', function (data) {
-        ssh(client.id, data['command']);
     });
 });
 
@@ -61,15 +64,20 @@ socket.sockets.on('connection', function(client){
 function ssh(clientId, data) {
     var hasPassword = false;
     var commands = data.toString().split("^");
-    process.stdout.write(commands[0] + " : " + commands[1]);
+    logger.trace("commands - " + commands.toString());
+
+    logger.debug("About to ssh to " + commands[1] + " and run " + commands[0]);
     var ssh = spawn('ssh', [ commands[1], commands[0]]);
 
     ssh.stdout.on('data', function (out) {
-        process.stdout.write(out);
+        logger.debug("Sending to " + clientId + " the output " + out);
 
         //Send private message only to that client
         socket.sockets.sockets[clientId].send(out);
+
         if (!hasPassword) {
+            logger.trace("Triggered hasPassword - " + hasPassword);
+
             var stdin = process.openStdin();
             stdin.on('data', function (chunk) {
                 ssh.stdin.write(chunk);
@@ -80,7 +88,8 @@ function ssh(clientId, data) {
     });
 
     ssh.stderr.on('data', function (err) {
-        process.stdout.write(err);
-        socket.of("").send(err);
+        logger.error("Error " + err);
+
+        socket.sockets.sockets[clientId].send("ERROR - " + err);
     });
 };

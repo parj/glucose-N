@@ -2,8 +2,6 @@ extends layout
 
 block content
 
-
-
     div.container
         div.row
             h1= "Glucose-N"
@@ -14,7 +12,7 @@ block content
                 div#divError(class="control-group")
                     div.controls
                         input#txtCommand(class="span11 input-medium search-query control-label", type="text", placeholder="Type: <ssh commands^user@host>. Ex: ls;uname -a^foo@bar.com")
-                        btn#btnCommand(class="btn btn-primary", type="submit")= "Submit"
+                        btn#btnCommand(class="btn btn-primary", onclick="sendMessage()")= "Submit"
                         div#txtHelp
 
         div.row
